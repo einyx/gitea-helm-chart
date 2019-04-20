@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "gitea.fullname" . }}
+  labels:
+    app: {{ template "gitea.fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  type: {{ .Values.service.ssh.serviceType }}
+  ports:
+    - name: ssh
+      port: {{ .Values.service.ssh.port }}
+      targetPort: ssh
+    - name: http
+      port: {{ .Values.service.http.port }}
+<<<<<<< HEAD
+      targetPort: {{ .Values.service.http.port }}
+=======
+      targetPort: 3000 
+>>>>>>> bf20c56... many fixes
+  selector:
+    app: {{ template "gitea.fullname" . }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gitea-ssh
+  labels:
+    app: {{ template "gitea.fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  type: NodePort 
+  ports:
+    - name: ssh
+      port: {{ .Values.service.ssh.port }}
+      targetPort: ssh
+      nodePort: 22
